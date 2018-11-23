@@ -17,43 +17,41 @@
 // along with LowRes NX.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef dev_mode_h
-#define dev_mode_h
+#ifndef dev_menu_h
+#define dev_menu_h
+
+#include "config.h"
+
+#if DEV_MENU
 
 #include <stdio.h>
 #include <stdbool.h>
 #include "core.h"
 #include "settings.h"
+#include "runner.h"
 #include "text_lib.h"
-
-enum DevModeState {
-    DevModeStateOff,
-    DevModeStateVisible,
-    DevModeStateRunningProgram,
-    DevModeStateRunningTool
-};
 
 enum DevModeMenu {
     DevModeMenuMain,
     DevModeMenuTools
 };
 
-struct DevMode {
-    enum DevModeState state;
-    struct Core *core;
+struct DevMenu {
+    struct Runner *runner;
     struct Settings *settings;
     bool lastTouch;
     enum DevModeMenu currentMenu;
     int currentButton;
     int currentMenuSize;
-    char mainProgramFilename[FILENAME_MAX];
     struct CoreError lastError;
     struct TextLib textLib;
 };
 
-bool dev_hasProgram(struct DevMode *devMode);
-void dev_show(struct DevMode *devMode);
-void dev_update(struct DevMode *devMode, struct CoreInput *input);
-void dev_runProgram(struct DevMode *devMode);
+void dev_init(struct DevMenu *devMenu, struct Runner *runner, struct Settings *settings);
+void dev_show(struct DevMenu *devMenu, bool reload);
+void dev_update(struct DevMenu *devMenu, struct CoreInput *input);
+bool dev_handleDropFile(struct DevMenu *devMenu, const char *filename);
 
-#endif /* dev_mode_h */
+#endif
+
+#endif /* dev_menu_h */

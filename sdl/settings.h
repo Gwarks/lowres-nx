@@ -23,12 +23,25 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-struct Settings {
-    const char *program;
-    char programsPath[FILENAME_MAX];
+#define MAX_TOOLS 4
+#define TOOL_NAME_SIZE 21
+
+struct Parameters {
     bool fullscreen;
+    bool disabledev;
 };
 
-void settings_init(struct Settings *settings, int argc, const char * argv[]);
+struct Settings {
+    struct Parameters file;
+    struct Parameters session;
+    int numTools;
+    char tools[MAX_TOOLS][FILENAME_MAX];
+    char toolNames[MAX_TOOLS][TOOL_NAME_SIZE];
+};
+
+void settings_init(struct Settings *settings, char *filenameOut, int argc, const char * argv[]);
+void settings_save(struct Settings *settings);
+bool settings_addTool(struct Settings *settings, const char *filename);
+void settings_removeTool(struct Settings *settings, int index);
 
 #endif /* settings_h */

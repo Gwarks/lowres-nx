@@ -17,19 +17,28 @@
 // along with LowRes NX.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef interpreter_utils_h
-#define interpreter_utils_h
+#ifndef main_h
+#define main_h
 
-#include <stdio.h>
 #include <stdbool.h>
-#include "value.h"
-#include "video_chip.h"
-#include "audio_chip.h"
 
-struct Core;
+enum MainState {
+    MainStateUndefined,
+    MainStateBootIntro,
+    MainStateRunningProgram,
+    MainStateRunningTool,
+    MainStateDevMenu,
+};
 
-struct TypedValue itp_evaluateCharAttributes(struct Core *core, union CharacterAttributes oldAttr);
-struct TypedValue itp_evaluateDisplayAttributes(struct Core *core, union DisplayAttributes oldAttr);
-struct TypedValue itp_evaluateLFOAttributes(struct Core *core, union LFOAttributes oldAttr);
+void bootNX(void);
+void rebootNX(void);
+bool hasProgram(void);
+const char *getMainProgramFilename(void);
+void selectProgram(const char *filename);
+void runMainProgram(void);
+void runToolProgram(const char *filename);
+void showDevMenu(void);
+bool usesMainProgramAsDisk(void);
+void getDiskFilename(char *outputString);
 
-#endif /* interpreter_utils_h */
+#endif /* main_h */

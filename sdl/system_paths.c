@@ -1,5 +1,5 @@
 //
-// Copyright 2017-2018 Timo Kloss
+// Copyright 2018 Timo Kloss
 //
 // This file is part of LowRes NX.
 //
@@ -17,19 +17,21 @@
 // along with LowRes NX.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef interpreter_utils_h
-#define interpreter_utils_h
+#include "system_paths.h"
+#include <stdlib.h>
+#include <string.h>
 
-#include <stdio.h>
-#include <stdbool.h>
-#include "value.h"
-#include "video_chip.h"
-#include "audio_chip.h"
-
-struct Core;
-
-struct TypedValue itp_evaluateCharAttributes(struct Core *core, union CharacterAttributes oldAttr);
-struct TypedValue itp_evaluateDisplayAttributes(struct Core *core, union DisplayAttributes oldAttr);
-struct TypedValue itp_evaluateLFOAttributes(struct Core *core, union LFOAttributes oldAttr);
-
-#endif /* interpreter_utils_h */
+void desktop_path(char *buffer, size_t size)
+{
+#if defined(__APPLE__) && defined(__MACH__)
+    strncpy(buffer, getenv("HOME"), size - 1);
+    strncat(buffer, "/Desktop/", size - 1);
+#elif defined(_WIN32)
+	strncpy(buffer, getenv("USERPROFILE"), size - 1);
+	strncat(buffer, "\\Desktop\\", size - 1);
+#elif defined(__EMSCRIPTEN__)
+    strncpy(buffer, "", size - 1);
+#else
+#error Not implemented yet
+#endif
+}

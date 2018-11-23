@@ -17,19 +17,22 @@
 // along with LowRes NX.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef interpreter_utils_h
-#define interpreter_utils_h
+#ifndef runner_h
+#define runner_h
 
 #include <stdio.h>
 #include <stdbool.h>
-#include "value.h"
-#include "video_chip.h"
-#include "audio_chip.h"
+#include "core.h"
 
-struct Core;
+struct Runner {
+    struct Core *core;
+    struct CoreDelegate coreDelegate;
+    bool messageShownUsingDisk;
+};
 
-struct TypedValue itp_evaluateCharAttributes(struct Core *core, union CharacterAttributes oldAttr);
-struct TypedValue itp_evaluateDisplayAttributes(struct Core *core, union DisplayAttributes oldAttr);
-struct TypedValue itp_evaluateLFOAttributes(struct Core *core, union LFOAttributes oldAttr);
+void runner_init(struct Runner *runner);
+void runner_deinit(struct Runner *runner);
+bool runner_isOkay(struct Runner *runner);
+struct CoreError runner_loadProgram(struct Runner *runner, const char *filename);
 
-#endif /* interpreter_utils_h */
+#endif /* runner_h */

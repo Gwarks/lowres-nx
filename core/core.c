@@ -85,6 +85,7 @@ struct CoreError core_compileProgram(struct Core *core, const char *sourceCode)
 {
     machine_reset(core);
     overlay_reset(core);
+    disk_reset(core);
     return itp_compileProgram(core, sourceCode);
 }
 
@@ -123,7 +124,8 @@ void core_update(struct Core *core, struct CoreInput *input)
     itp_runInterrupt(core, InterruptTypeVBL);
     itp_runProgram(core);
     itp_didFinishVBL(core);
-    overlay_draw(core);
+    overlay_draw(core, true);
+    audio_bufferRegisters(core);
 }
 
 void core_handleInput(struct Core *core, struct CoreInput *input)
